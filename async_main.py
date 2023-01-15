@@ -12,7 +12,7 @@ def main():
     # 逐个代码进行
     if MODE == 1:
         for stock_code,row in SELECT_DF.iterrows():
-            print(row)
+            print('\n'+row)
             print("==================================")
             print(f"【 {stock_code} 】  {CURRENT_NUM}/{len(SELECT_DF)}")
             CURRENT_NUM += 1
@@ -26,6 +26,8 @@ def main():
         to_dirs = []
         print(f"【 [{START_CODE},{END_CODE}) 】")
         for stock_code,row in SELECT_DF.iterrows():
+            print('\n'+row)
+            print("==================================")
             print(f"【 {stock_code} 】  {CURRENT_NUM}/{len(SELECT_DF)}")
             CURRENT_NUM += 1
             print(row)
@@ -109,7 +111,7 @@ def pre_presented():
 if __name__=="__main__":
     START_DATE,END_DATE = ['2011','2023']
     PAR_DIR = './data/'
-    CURRENT_NUM = 0
+    CURRENT_NUM = 1
     pre_presented()
     try:
         main()
