@@ -12,7 +12,7 @@ def main():
     # 逐个代码进行
     if MODE == 1:
         for stock_code,row in SELECT_DF.iterrows():
-            print('\n'+row)
+            print('\n'+'\n'+row)
             print("==================================")
             print(f"【 {stock_code} 】  {CURRENT_NUM}/{len(SELECT_DF)}")
             CURRENT_NUM += 1
@@ -26,7 +26,7 @@ def main():
         to_dirs = []
         print(f"【 [{START_CODE},{END_CODE}) 】")
         for stock_code,row in SELECT_DF.iterrows():
-            print('\n'+row)
+            print('\n'+'\n'+row)
             print("==================================")
             print(f"【 {stock_code} 】  {CURRENT_NUM}/{len(SELECT_DF)}")
             CURRENT_NUM += 1

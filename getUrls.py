@@ -212,7 +212,7 @@ def get_name_url(stock_code,START_DATE,END_DATE):
     
     end=time.time()
     
-    print('********time to open processing all files are {}*********'.format((end-start)))
+    print('========== time to open processing all files are {} =========='.format((end-start)))
     
     return urls
 
@@ -259,6 +259,7 @@ def get_names_urls(stock_code_set,START_DATE,END_DATE):
     
     end=time.time()
     
-    print('********time to open processing all files are {}*********'.format((end-start)))
+    # print('********time to open processing all files are {}*********'.format((end-start)))
+    print('========== time to open processing all files are {} =========='.format((end-start)))
     
     return urls

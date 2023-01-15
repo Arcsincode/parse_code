@@ -37,19 +37,20 @@ async def download(session, name_url, to_dir):
         pass
 
     name,url = name_url
-    print(f"将要下载：【 {name} 】")
+    print(f"将要下载：【 {name} | {url} 】")
     
+    file_path = os.path.join(to_dir,name)
+    # if os.path.isfile(file_path):
+    #     print("=> ! 文件已存在")
+    #     return 0
+
     time.sleep(random.uniform(1,2)/5)
     response = await session.get(url, headers=HEADER,proxy=PROXIES)
     # 写入
-    file_path = os.path.join(to_dir,name)
-    if os.path.isfile(file_path):
-        print("文件已存在！")
-        pass
-    else:
-        with open(file_path,'wb')as f:
-            f.write(await response.content.read())
-    return
+    with open(file_path,'wb')as f:
+        f.write(await response.content.read())
+        print(f"=>  √ 【 {name} 】下载完成")
+    return int(response.headers.get('Content-Length'))/1024/1024
 
 def download_tasks(session, names_urls,to_dir):
     if type(to_dir)==str:
@@ -71,10 +72,12 @@ async def async_download(names_urls,to_dir):
 
     async with aiohttp.ClientSession() as session:
         tasks = download_tasks(session,names_urls,to_dir)
-        await asyncio.gather(*tasks)    
+        download_sizes = await asyncio.gather(*tasks)    
 
         end = time.perf_counter()
-        print(f"It took 【 {end - start:.6f} 】seconds to download.")
+        # print("Finish")
+        print(f"共下载 【 {sum(download_sizes)} 】 MB 数据")
+        print(f"共花费 【 {end - start:.6f} 】 秒")
         return
         
 # @timeit
@@ -84,5 +87,5 @@ async def async_download(names_urls,to_dir):
 
 if __name__=='__main__':
     import getUrls
-    names_urls = getUrls.get_name_url('000006','2011','2023')
+    names_urls = getUrls.get_name_url('000070','2011','2023')
     asyncio.run(async_download(names_urls,to_dir='./data'))
