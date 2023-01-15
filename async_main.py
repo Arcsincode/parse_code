@@ -120,7 +120,7 @@ if __name__=="__main__":
     try:
         main()
     except Exception as e:
-        print(e)
+        #print(e)
         print(f'\n本次输入为：【 start：{START_input}, nums：{NUMS}, end：{END_input} 】')
         print(f"本次代码范围为：【 ['{START_CODE}','{END_CODE}'),共{len(SELECT_DF)}条 】")
         print(f'当前为第【 {CURRENT_NUM}条 】')
