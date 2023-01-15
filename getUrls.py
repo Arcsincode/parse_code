@@ -75,7 +75,7 @@ def get_response(page_num,stock_code,return_total_count=False,START_DATE = '2013
 
     def get_query_from_code(stock_code,):
         q_dict = get_s_query_dict(stock_code,)
-        print(q_dict)
+        # print(q_dict)
         query_new = {
                 'tabName': 'fulltext', 
                 'pageSize': MAX_PAGESIZE,

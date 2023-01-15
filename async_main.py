@@ -8,11 +8,14 @@ import os
 
 
 def main():
+    global CURRENT_NUM
     # 逐个代码进行
     if MODE == 1:
         for stock_code,row in SELECT_DF.iterrows():
             print(row)
-            print(f"【 {stock_code} 】")
+            print("==================================")
+            print(f"【 {stock_code} 】  {CURRENT_NUM}/{len(SELECT_DF)}")
+            CURRENT_NUM += 1
             names_urls = getUrls.get_name_url(stock_code,START_DATE,END_DATE)
             asyncio.run(downloadFromCode.async_download(names_urls,to_dir=os.path.join(PAR_DIR,stock_code)))
             print(f"【 {stock_code} 】 Done!")
@@ -23,6 +26,8 @@ def main():
         to_dirs = []
         print(f"【 [{START_CODE},{END_CODE}) 】")
         for stock_code,row in SELECT_DF.iterrows():
+            print(f"【 {stock_code} 】  {CURRENT_NUM}/{len(SELECT_DF)}")
+            CURRENT_NUM += 1
             print(row)
             current_names_urls = getUrls.get_name_url(stock_code,START_DATE,END_DATE)
             names_urls += current_names_urls
@@ -104,10 +109,12 @@ def pre_presented():
 if __name__=="__main__":
     START_DATE,END_DATE = ['2011','2023']
     PAR_DIR = './data/'
+    CURRENT_NUM = 0
     pre_presented()
     try:
         main()
-    except:
+    except Exception as e:
+        print(e)
         print(f'\n本次输入为：【 start：{START_input}, nums：{NUMS}, end：{END_input} 】')
         print(f"本次代码范围为：【 ['{START_CODE}','{END_CODE}'),共{len(SELECT_DF)}条 】")
-
+        print(f'当前为第【 {CURRENT_NUM}条 】')
