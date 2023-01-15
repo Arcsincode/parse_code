@@ -33,19 +33,22 @@ async def download(session, name_url, to_dir):
     try:
         os.mkdir(to_dir)
         print(f"已创建文件夹{to_dir}")
-    except Exception as e:
-        print(e)
+    except:
+        pass
 
     name,url = name_url
-    # print(f"将要访问：【 {url} 】")
     print(f"将要下载：【 {name} 】")
-    # headers = {
-    #     "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/107.0.0.0 Safari/537.36 Edg/107.0.1418.28",
-    # }
+    
     time.sleep(random.uniform(1,2)/5)
     response = await session.get(url, headers=HEADER,proxy=PROXIES)
-    with open(os.path.join(to_dir,name),'wb')as f:
-        f.write(await response.content.read())
+    # 写入
+    file_path = os.path.join(to_dir,name)
+    if os.path.isfile(file_path):
+        print("文件已存在！")
+        pass
+    else:
+        with open(file_path,'wb')as f:
+            f.write(await response.content.read())
     return
 
 def download_tasks(session, names_urls,to_dir):

@@ -13,6 +13,12 @@ if __name__=="__main__":
     # 起始代码
     START_CODE = ''
     
+    try:
+        os.mkdir(PAR_DIR)
+        print(f"已创建文件夹{PAR_DIR}")
+    except:
+        pass
+    
     code_df = pd.read_csv('./code_orgId.csv',dtype=str,)
     code = code_df.set_index('code')
     for stock_code,row in code.loc[START_CODE:].iterrows():
