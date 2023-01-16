@@ -15,6 +15,11 @@ if PORT==-1:
 else:
     PROXIES = f"http://127.0.0.1:{PORT}"
 
+
+COUNT_LIST = [0]
+TOTAL_LIST = [0]
+
+
 def timeit(func):
     def wrapper(*args, **kwargs):
         start = time.perf_counter()
@@ -45,11 +50,13 @@ async def download(session, name_url, to_dir):
     #     return 0
 
     time.sleep(random.uniform(1,2)/5)
-    response = await session.get(url, headers=HEADER,proxy=PROXIES)
+    response = await session.get(url, headers=HEADER,proxy=PROXIES,timeout=30)
+    print(response)
     # 写入
     with open(file_path,'wb')as f:
         f.write(await response.content.read())
-        print(f"=>  √ 【 {name} 】下载完成")
+        COUNT_LIST[0] += 1
+        print(f"[{COUNT_LIST[0]}/{TOTAL_LIST[0]}]  √ 【 {name} 】下载完成")
     return int(response.headers.get('Content-Length'))/1024/1024
 
 def download_tasks(session, names_urls,to_dir):
@@ -69,7 +76,7 @@ async def async_download(names_urls,to_dir):
     import aiohttp
     # names_urls = getUrls.get_name_url(stack_code, START_DATE, END_DATE,**args)
     start = time.perf_counter()
-
+    TOTAL_LIST[0] = len(names_urls)
     async with aiohttp.ClientSession() as session:
         tasks = download_tasks(session,names_urls,to_dir)
         download_sizes = await asyncio.gather(*tasks)    
