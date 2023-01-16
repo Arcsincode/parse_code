@@ -12,7 +12,9 @@ def main():
     # 逐个代码进行
     if MODE == 1:
         for stock_code,row in SELECT_DF.iterrows():
-            print('\n'+'\n'+row)
+            print('')
+            print('')
+            print(row)
             print("==================================")
             print(f"【 {stock_code} 】  {CURRENT_NUM}/{len(SELECT_DF)}")
             CURRENT_NUM += 1
@@ -26,7 +28,9 @@ def main():
         to_dirs = []
         print(f"【 [{START_CODE},{END_CODE}) 】")
         for stock_code,row in SELECT_DF.iterrows():
-            print('\n'+'\n'+row)
+            print('')
+            print('')
+            print(row)
             print("==================================")
             print(f"【 {stock_code} 】  {CURRENT_NUM}/{len(SELECT_DF)}")
             CURRENT_NUM += 1
@@ -116,7 +120,7 @@ if __name__=="__main__":
     try:
         main()
     except Exception as e:
-        print(e)
+        #print(e)
         print(f'\n本次输入为：【 start：{START_input}, nums：{NUMS}, end：{END_input} 】')
         print(f"本次代码范围为：【 ['{START_CODE}','{END_CODE}'),共{len(SELECT_DF)}条 】")
         print(f'当前为第【 {CURRENT_NUM}条 】')
