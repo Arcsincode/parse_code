@@ -1,7 +1,7 @@
 import pandas as pd
 import getUrls 
 import asyncio
-import asyncDownload
+import asyncRequests
 import os
 
 
@@ -19,7 +19,7 @@ def main():
             print(f"【 {stock_code} 】  {CURRENT_NUM}/{len(SELECT_DF)}")
             CURRENT_NUM += 1
             names_urls = getUrls.get_name_url(stock_code,START_DATE,END_DATE)
-            asyncio.run(asyncDownload.async_downloads(names_urls,to_dir=os.path.join(PAR_DIR,stock_code)))
+            asyncio.run(asyncRequests.async_downloads(names_urls,to_dir=os.path.join(PAR_DIR,stock_code)))
             print(f"【 {stock_code} 】 Done!")
     
 
@@ -30,7 +30,7 @@ def main():
         print(f"【 [{START_CODE},{END_CODE}) 】")
         stock_code_set = [i[0] for i in SELECT_DF.iterrows()]
         names_urls = getUrls.async_get_names_urls(stock_code_set,START_DATE,END_DATE)
-        asyncio.run(asyncDownload.async_downloads(names_urls,to_dir=PAR_DIR))
+        asyncio.run(asyncRequests.async_downloads(names_urls,to_dir=PAR_DIR))
         print(f"【 [{START_CODE},{END_CODE}) 】 All Done!")
 
 
@@ -51,7 +51,7 @@ def main():
             names_urls += current_names_urls
             to_dirs += [ os.path.join(PAR_DIR,stock_code) ]*len(current_names_urls)
             
-        asyncio.run(asyncDownload.async_downloads(names_urls,to_dir=to_dirs))
+        asyncio.run(asyncRequests.async_downloads(names_urls,to_dir=to_dirs))
         print(f"【 [{START_CODE},{END_CODE}) 】 All Done!")
 
 
@@ -80,7 +80,8 @@ def transform_to_index(name,dataframe):
 
 
 def pre_presented():
-    global START_CODE,NUMS,END_CODE,SELECT_DF,START_input,END_input,MODE
+    global START_CODE,NUMS,END_CODE,SELECT_DF,START_input,END_input,MODE,START_DATE,END_DATE,PAR_DIR
+    
 
     code_df = pd.read_csv('./code_orgId.csv',dtype=str,)
     code = code_df.set_index('code')
@@ -112,12 +113,34 @@ def pre_presented():
 
     print("""
 :模式：
-1：START_CODE:END_CODE 单线程运作
-2：START_CODE:END_CODE 仅使用协程下载文件
-3：START_CODE:END_CODE 使用协程获取链接和下载文件【注：该方法会将所有文件下载到同一个文件夹中】
+1： START_CODE:END_CODE 单线程运作
+2： START_CODE:END_CODE 仅使用协程下载文件
+3： START_CODE:END_CODE 使用协程获取链接和下载文件【注：该方法会将所有文件下载到同一个文件夹中】
 """)
     MODE = int(input())
 
+    while True:
+        input_num = input(f"""
+当前其他配置为:
+1： START_DATE = {START_DATE} （开始于 {END_DATE}-01-01 后发布）
+2： END_DATE = {END_DATE} （截止至 {END_DATE}-12-31 前发布）
+3： PAR_DIR = {PAR_DIR}
+要修改请输入对应数字，否则直接回车跳过""")
+        if not input_num:
+            break
+        if input_num == '1':
+            START_DATE = input()
+        elif input_num == '2':
+            END_DATE = input()
+        elif input_num == '3':
+            PAR_DIR = input()
+        # elif input_num == '4':
+        #     import config
+        #     config.PORT = input()
+            
+
+            
+        
 
     try:
         os.mkdir(PAR_DIR)
@@ -134,7 +157,8 @@ if __name__=="__main__":
     try:
         main()
     except Exception as e:
-        #print(e)
+        print(e)
+    finally:
         print(f'\n本次输入为：【 start：{START_input}, nums：{NUMS}, end：{END_input} 】')
         print(f"本次代码范围为：【 ['{START_CODE}','{END_CODE}'),共{len(SELECT_DF)}条 】")
         print(f'当前为第【 {CURRENT_NUM} 】条')

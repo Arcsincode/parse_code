@@ -205,7 +205,7 @@ def get_name_url(stock_code,START_DATE,END_DATE):
 
 def async_get_names_urls(stock_code_set,START_DATE,END_DATE):
     import asyncio
-    from asyncDownload import async_posts
+    from asyncRequests import async_posts
 
     def get_query_from_code(stock_code,page_num):
         q_dict = get_s_query_dict(stock_code,)
