@@ -122,7 +122,7 @@ def pre_presented():
     while True:
         input_num = input(f"""
 当前其他配置为:
-1： START_DATE = {START_DATE} （开始于 {END_DATE}-01-01 后发布）
+1： START_DATE = {START_DATE} （开始于 {START_DATE}-01-01 后发布）
 2： END_DATE = {END_DATE} （截止至 {END_DATE}-12-31 前发布）
 3： PAR_DIR = {PAR_DIR}
 要修改请输入对应数字，否则直接回车跳过""")
@@ -134,13 +134,7 @@ def pre_presented():
             END_DATE = input()
         elif input_num == '3':
             PAR_DIR = input()
-        # elif input_num == '4':
-        #     import config
-        #     config.PORT = input()
             
-
-            
-        
 
     try:
         os.mkdir(PAR_DIR)
