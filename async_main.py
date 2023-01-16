@@ -22,6 +22,18 @@ def main():
             asyncio.run(asyncDownload.async_downloads(names_urls,to_dir=os.path.join(PAR_DIR,stock_code)))
             print(f"【 {stock_code} 】 Done!")
     
+
+    # START_CODE:END_CODE 使用协程进行链接获取
+    elif MODE == 3:
+        names_urls = []
+        to_dirs = []
+        print(f"【 [{START_CODE},{END_CODE}) 】")
+        stock_code_set = [i[0] for i in SELECT_DF.iterrows()]
+        names_urls = getUrls.async_get_names_urls(stock_code_set,START_DATE,END_DATE)
+        asyncio.run(asyncDownload.async_downloads(names_urls,to_dir=PAR_DIR))
+        print(f"【 [{START_CODE},{END_CODE}) 】 All Done!")
+
+
     # START_CODE:END_CODE 同时进行
     elif MODE == 2:
         names_urls = []
@@ -41,6 +53,7 @@ def main():
             
         asyncio.run(asyncDownload.async_downloads(names_urls,to_dir=to_dirs))
         print(f"【 [{START_CODE},{END_CODE}) 】 All Done!")
+
 
 
 def my_input():
@@ -99,8 +112,9 @@ def pre_presented():
 
     print("""
 :模式：
-1表示 START_CODE:END_CODE 逐一进行
-2表示 START_CODE:END_CODE 同时进行
+1：START_CODE:END_CODE 单线程运作
+2：START_CODE:END_CODE 仅使用协程下载文件
+3：START_CODE:END_CODE 使用协程获取链接和下载文件【注：该方法会将所有文件下载到同一个文件夹中】
 """)
     MODE = int(input())
 

@@ -17,8 +17,8 @@ else:
 
 
 COUNT_LIST = [0]
-TOTAL_LIST = [0]
-TIMEOUT_TAO = 10 # 二进制指数退避的争用期窗口大小
+TOTAL_LIST = [1]
+TIMEOUT_TAO = 5 # 二进制指数退避的争用期窗口大小
 
 def timeit(func):
     def wrapper(*args, **kwargs):
@@ -29,6 +29,13 @@ def timeit(func):
         return res
 
     return wrapper
+
+
+def random_time_out(timeout_times,):
+    if timeout_times > 0:
+        time.sleep(TIMEOUT_TAO * random.uniform(0,pow(2,timeout_times)-1))
+    timeout_times += 1
+    return timeout_times
 
 
 def get_progress(count,total):
@@ -44,17 +51,20 @@ async def post(session, url, data,):
     :return: response.json()
     """ 
     print(f"将要POST：【 {url} 】")
+    timeout_times = 0
     while True:
+        timeout_times = random_time_out(timeout_times,)
         try:
-            response = await session.post(url, data, headers=HEADER,proxy=PROXIES,)
+            response = await session.post(url, data=data, headers=HEADER,proxy=PROXIES,)
+            if response.status == 200:
+                break
         except Exception as e:
             print(e)
             continue
-        if res.status==200:
-            break
+        
     res = await response.json()
     COUNT_LIST[0] += 1
-    print(f"{get_progress(COUNT_LIST[0],TOTAL_LIST[0])} √")
+    print(f"{get_progress(COUNT_LIST[0],TOTAL_LIST[0])} √ POST")
     return res
 
 
@@ -75,13 +85,19 @@ async def download(session, name_url, to_dir):
 
     # time.sleep(random.uniform(1,2)/5)
     timeout_times = 0
+    file_size_bytes = 0
     # timeout = TIMEOUT
     while True:
-        time.sleep(TIMEOUT_TAO * random.uniform(0,pow(2,timeout_times)-1))
+        timeout_times = random_time_out(timeout_times,)
         try:
             response = await session.get(url, headers=HEADER,proxy=PROXIES,)
             file_size_bytes = int(response.headers.get('Content-Length'))
-
+            
+            if response.status == 200:
+                pass
+            else:
+                raise asyncio.exceptions.TimeoutError
+            
             # 若已下载则跳过
             if os.path.isfile(file_path):
                 with open(file_path,'rb')as f:
@@ -97,15 +113,17 @@ async def download(session, name_url, to_dir):
                 f.write(await response.content.read())
                 COUNT_LIST[0] += 1
                 print(f"{get_progress(COUNT_LIST[0],TOTAL_LIST[0])}  √ 下载完成：【 {name} 】")
+
             break
+
         except asyncio.exceptions.TimeoutError:
-            timeout_times += 1
-            # timeout *= 2
-            print(f"第 {timeout_times} 次超时...文件：【 {name} 】")
+            print(f"第 {timeout_times} 次超时...文件为：【 {name} 】")
             continue
         except Exception as e:
-            break
             print(e)
+            break
+
+
     return file_size_bytes/1024/1024
 
 
@@ -148,35 +166,9 @@ async def async_downloads(names_urls,to_dir):
         return
         
 
-
-async def async_posts(urls,datas):
-    # import getUrls
-    import aiohttp
-    # names_urls = getUrls.get_name_url(stack_code, START_DATE, END_DATE,**args)
-    start = time.perf_counter()
-    COUNT_LIST[0] = 0
-    TOTAL_LIST[0] = len(names_urls)
-    async with aiohttp.ClientSession() as session:
-        tasks = downloads_tasks(session,names_urls,to_dir)
-        download_sizes = await asyncio.gather(*tasks)    
-
-        end = time.perf_counter()
-        all_size = sum(download_sizes)
-        spend_time = end - start
-        # print("Finish")
-        print(f"共下载 【 {all_size:.3f} 】 MB 数据")
-        print(f"共花费 【 {spend_time:.3f} 】 秒")
-        print(f"下载速度为 【 {all_size/spend_time:.3f} 】 MB/s")
-        return
-
-# @timeit
-# def async_download_from_code(stack_code, START_DATE, END_DATE,to_dir):
-#     asyncio.run(main(to_dir,stack_code, START_DATE, END_DATE,))
-
-
 if __name__=='__main__':
     import getUrls
     names_urls = getUrls.get_name_url('000045','2011','2023')
     asyncio.run(async_downloads(names_urls,to_dir='./data'))
-    names_urls = getUrls.get_name_url('000006','2011','2023')
+    names_urls = getUrls.get_name_url('000010','2011','2023')
     asyncio.run(async_downloads(names_urls,to_dir='./data'))
