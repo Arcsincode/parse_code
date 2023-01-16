@@ -107,7 +107,6 @@ def get_response(page_num,stock_code,return_total_count=False,START_DATE = '2013
         if r.status_code == requests.codes.ok and r.text != '':
             break
     my_query = r.json()
-    # print(my_query)
     try:
         r.close()
     except Exception as e:
@@ -174,13 +173,6 @@ def __filter_illegal_filename(filename):
 def get_name_url(stock_code,START_DATE,END_DATE):
     START_DATE=START_DATE+'-01-01'
     END_DATE=END_DATE+'-01-01'
-    # 初始化重要变量
-    # out_dir = standardize_dir(OUT_DIR)
-    # error_log = out_dir + 'error.log'
-    # output_csv_file = out_dir + OUTPUT_FILENAME.replace('/', '') + '_' + \
-                    #   START_DATE.replace('-', '') + '-' + END_DATE.replace('-', '') + '.csv'
-    # csv_out=open(output_csv_file, 'w', newline='', encoding='utf-8')
-    # writer = csv.writer(csv_out)
     urls = []
     
     start=time.time()
@@ -199,12 +191,6 @@ def get_name_url(stock_code,START_DATE,END_DATE):
     for i in range(begin_pg, end_pg + 1):
         row = get_response(i,stock_code,START_DATE = START_DATE,END_DATE = END_DATE)
         urls += (row)
-        # if not row:
-        #     __log_error('Failed to fetch page #' + str(i) +
-        #                 ': exceeding max reloading times (' + str(MAX_RELOAD_TIMES) + ').')
-        #     continue
-        # else:
-        #     writer.writerows(row)
         last_item = i * MAX_PAGESIZE if i < end_pg else item_count
         print('Page ' + str(i) + '/' + str(end_pg) + ' fetched, it contains items: (' +
                 str(1 + (i - 1) * MAX_PAGESIZE) + '-' + str(last_item) + ')/' + str(item_count) + '.')
@@ -218,15 +204,16 @@ def get_name_url(stock_code,START_DATE,END_DATE):
 
 
 def get_names_urls(stock_code_set,START_DATE,END_DATE):
+    urls = []
+    tasks = []
+    ress = asyncio.gather(*tasks)
+    for res in ress:
+        urls += res
+    return urls
+
+def get_names_urls(stock_code_set,START_DATE,END_DATE):
     START_DATE=START_DATE+'-01-01'
     END_DATE=END_DATE+'-01-01'
-    # 初始化重要变量
-    # out_dir = standardize_dir(OUT_DIR)
-    # error_log = out_dir + 'error.log'
-    # output_csv_file = out_dir + OUTPUT_FILENAME.replace('/', '') + '_' + \
-                    #   START_DATE.replace('-', '') + '-' + END_DATE.replace('-', '') + '.csv'
-    # csv_out=open(output_csv_file, 'w', newline='', encoding='utf-8')
-    # writer = csv.writer(csv_out)
     urls = []
     
     start=time.time()
@@ -245,13 +232,8 @@ def get_names_urls(stock_code_set,START_DATE,END_DATE):
             #writer = csv.writer(csv_out)
         for i in range(begin_pg, end_pg + 1):
             row = get_response(i,stock_code,START_DATE = START_DATE,END_DATE = END_DATE)
-            urls.append(row)
-            # if not row:
-            #     __log_error('Failed to fetch page #' + str(i) +
-            #                 ': exceeding max reloading times (' + str(MAX_RELOAD_TIMES) + ').')
-            #     continue
-            # else:
-            #     writer.writerows(row)
+            # urls.append(row)
+            urls += row
             last_item = i * MAX_PAGESIZE if i < end_pg else item_count
             print('Page ' + str(i) + '/' + str(end_pg) + ' fetched, it contains items: (' +
                     str(1 + (i - 1) * MAX_PAGESIZE) + '-' + str(last_item) + ')/' + str(item_count) + '.')
@@ -263,3 +245,10 @@ def get_names_urls(stock_code_set,START_DATE,END_DATE):
     print('========== time to open processing all files are {} =========='.format((end-start)))
     
     return urls
+
+
+if __name__=='__main__':
+    START_DATE,END_DATE = ['2011','2023']
+    stock_code_set = ['000006','000007','000008']
+    current_names_urls = get_names_urls(stock_code_set,START_DATE,END_DATE)
+    print(current_names_urls)

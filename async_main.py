@@ -1,7 +1,7 @@
 import pandas as pd
 import getUrls 
 import asyncio
-import downloadFromCode
+import asyncDownload
 import os
 
 
@@ -19,7 +19,7 @@ def main():
             print(f"【 {stock_code} 】  {CURRENT_NUM}/{len(SELECT_DF)}")
             CURRENT_NUM += 1
             names_urls = getUrls.get_name_url(stock_code,START_DATE,END_DATE)
-            asyncio.run(downloadFromCode.async_download(names_urls,to_dir=os.path.join(PAR_DIR,stock_code)))
+            asyncio.run(asyncDownload.async_downloads(names_urls,to_dir=os.path.join(PAR_DIR,stock_code)))
             print(f"【 {stock_code} 】 Done!")
     
     # START_CODE:END_CODE 同时进行
@@ -39,7 +39,7 @@ def main():
             names_urls += current_names_urls
             to_dirs += [ os.path.join(PAR_DIR,stock_code) ]*len(current_names_urls)
             
-        asyncio.run(downloadFromCode.async_download(names_urls,to_dir=to_dirs))
+        asyncio.run(asyncDownload.async_downloads(names_urls,to_dir=to_dirs))
         print(f"【 [{START_CODE},{END_CODE}) 】 All Done!")
 
 
@@ -123,4 +123,4 @@ if __name__=="__main__":
         #print(e)
         print(f'\n本次输入为：【 start：{START_input}, nums：{NUMS}, end：{END_input} 】')
         print(f"本次代码范围为：【 ['{START_CODE}','{END_CODE}'),共{len(SELECT_DF)}条 】")
-        print(f'当前为第【 {CURRENT_NUM}条 】')
+        print(f'当前为第【 {CURRENT_NUM} 】条')
