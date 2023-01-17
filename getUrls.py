@@ -11,7 +11,7 @@ import csv
 import math
 import os
 import time
-import myRequests as requests
+import normRequests as requests
 import pandas as pd
 
 OUTPUT_FILENAME = 'report'
@@ -204,8 +204,7 @@ def get_name_url(stock_code,START_DATE,END_DATE):
 
 
 def async_get_names_urls(stock_code_set,START_DATE,END_DATE):
-    import asyncio
-    from asyncRequests import async_posts
+    from asyncRequests import async_posts_jsons
 
     def get_query_from_code(stock_code,page_num):
         q_dict = get_s_query_dict(stock_code,)
@@ -229,7 +228,7 @@ def async_get_names_urls(stock_code_set,START_DATE,END_DATE):
         urls = [URL] * len(stock_code_set)
         datas = [get_query_from_code(stock_code,1) for stock_code in stock_code_set]
         print("正在获取全部记录数和页数...")
-        res_get_page = asyncio.run(async_posts(urls=urls,datas=datas))
+        res_get_page = async_posts_jsons(urls=urls,datas=datas)
         records_list = [res['totalRecordNum'] for res in res_get_page]
         return records_list
 
@@ -268,7 +267,7 @@ def async_get_names_urls(stock_code_set,START_DATE,END_DATE):
     urls = [URL] * len(datas)    
 
     print("正在获取全部链接...")
-    jsons = asyncio.run(async_posts(urls=urls,datas=datas))
+    jsons = async_posts_jsons(urls=urls,datas=datas)
     for json in jsons:
         all_res += get_urls_from_json(json)
     return all_res

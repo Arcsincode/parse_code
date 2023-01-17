@@ -1,7 +1,7 @@
 import pandas as pd
 import getUrls 
 import asyncio
-import asyncRequests
+import asyncRequests 
 import os
 
 
@@ -19,7 +19,7 @@ def main():
             print(f"【 {stock_code} 】  {CURRENT_NUM}/{len(SELECT_DF)}")
             CURRENT_NUM += 1
             names_urls = getUrls.get_name_url(stock_code,START_DATE,END_DATE)
-            asyncio.run(asyncRequests.async_downloads(names_urls,to_dir=os.path.join(PAR_DIR,stock_code)))
+            asyncRequests.async_downloads(names_urls,to_dir=os.path.join(PAR_DIR,stock_code))
             print(f"【 {stock_code} 】 Done!")
     
 
@@ -30,7 +30,7 @@ def main():
         print(f"【 [{START_CODE},{END_CODE}) 】")
         stock_code_set = [i[0] for i in SELECT_DF.iterrows()]
         names_urls = getUrls.async_get_names_urls(stock_code_set,START_DATE,END_DATE)
-        asyncio.run(asyncRequests.async_downloads(names_urls,to_dir=PAR_DIR))
+        asyncRequests.async_downloads(names_urls,to_dir=PAR_DIR)
         print(f"【 [{START_CODE},{END_CODE}) 】 All Done!")
 
 
@@ -127,6 +127,7 @@ def pre_presented():
 3： PAR_DIR = {PAR_DIR}
 要修改请输入对应数字，否则直接回车跳过""")
         if not input_num:
+            print("已跳过")
             break
         if input_num == '1':
             START_DATE = input()
@@ -145,7 +146,7 @@ def pre_presented():
 
 if __name__=="__main__":
     START_DATE,END_DATE = ['2011','2023']
-    PAR_DIR = './data/'
+    PAR_DIR = './data/all_announcements'
     CURRENT_NUM = 1
     pre_presented()
     try:

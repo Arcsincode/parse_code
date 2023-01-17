@@ -1,2 +1,8 @@
 data/*
 test/*
+res/*
+__pycache__/asyncRequests.cpython-38.pyc
+__pycache__/getUrls.cpython-38.pyc
+__pycache__/normRequests.cpython-38.pyc
+__pycache__/parsePdf.cpython-38.pyc
+__pycache__/requests_config.cpython-38.pyc
