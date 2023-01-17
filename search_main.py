@@ -47,9 +47,6 @@ def query_all_dicts(param_dict):
 
     json_res = get_json_from_juchao(search_dict=param_dict)
     num_pages = get_num_pages_from_json(json_res)
-
-    num_pages = 1
-
     param_dict['pageNum'] = [i+1 for i in range(num_pages)]
     json_of_pages = get_json_from_juchao(search_dict=param_dict)
     
