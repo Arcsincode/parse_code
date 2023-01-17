@@ -32,5 +32,5 @@ def parse_pdf(pdf_dir):
     pd = parsePdf(pdf_dir)
     res['pages_num'] = pd.get_pages_num()
     res['words_num'] = pd.get_words_num()
-    print(res)
+    print(pdf_dir,res)
     return res
