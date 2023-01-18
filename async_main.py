@@ -32,6 +32,7 @@ def main():
         names_urls = getUrls.async_get_names_urls(stock_code_set,START_DATE,END_DATE)
         asyncRequests.async_downloads(names_urls,to_dir=PAR_DIR)
         print(f"【 [{START_CODE},{END_CODE}) 】 All Done!")
+        CURRENT_NUM = len(SELECT_DF)
 
 
     # START_CODE:END_CODE 同时进行
