@@ -1,7 +1,7 @@
 import pandas as pd
-import getUrls 
+import kits.getUrls as getUrls 
 import asyncio
-import asyncRequests 
+import kits.asyncRequests as asyncRequests 
 import os
 
 

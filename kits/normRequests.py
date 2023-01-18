@@ -1,6 +1,8 @@
 import requests 
-from requests_config import HEADER
-from requests_config import PORT
+import config
+from config import requests_config
+HEADER = requests_config.HEADER
+PORT = requests_config.PORT
 
 
 if PORT==-1:

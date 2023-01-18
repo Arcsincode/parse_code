@@ -1,9 +1,9 @@
-import reFormat  
-from reFormat import myTime
-import normRequests as requests
-from asyncRequests import async_gets_jsons,async_downloads
-from parsePdf import parse_pdf
-from multi_process import multi_process
+from kits import reFormat  
+from kits.reFormat import myTime
+import kits.normRequests as requests
+from kits.asyncRequests import async_gets_jsons,async_downloads
+from kits.parsePdf import parse_pdf
+from kits.multi_process import multi_process
 import time
 
 

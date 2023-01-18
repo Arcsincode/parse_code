@@ -4,11 +4,10 @@ import os
 import time
 import random
 
-
-
-from requests_config import HEADER
-from requests_config import PORT
-
+import config
+from config import requests_config
+HEADER = requests_config.HEADER
+PORT = requests_config.PORT
 
 if PORT==-1:
     PROXIES=''
@@ -220,7 +219,7 @@ def async_downloads(names_urls,to_dir):
         
 
 if __name__=='__main__':
-    import getUrls
+    import kits.getUrls as getUrls
     names_urls = getUrls.get_name_url('000045','2011','2023')
     async_downloads(names_urls,to_dir='./data')
     # asyncio.run(async_downloads(names_urls,to_dir='./data'))
