@@ -1,3 +1,2 @@
-database_config.py
-requests_config.py
+*_config.py
 __pycache__
