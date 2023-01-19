@@ -13,17 +13,24 @@ def timeit(func):
 
 
 @timeit
-def multi_process(parse_pdf,par_dirs):
-    pool = multiprocessing.Pool(8)
+def multi_process(func,arg_list,process_num=8):
+    pool = multiprocessing.Pool(process_num)
     res_all = []
-    # for par_dir in par_dirs:
-    #     res = pool.apply_async(parse_pdf,(par_dir,))
-    #     res_all.append(res)
-    res_all = pool.map(parse_pdf,par_dirs)
-    # print(res_all)
+    res_all = pool.map(func,arg_list)
     pool.close()
     pool.join()
     return res_all
+
+
+@timeit
+def multi_process_star(func,args_list,process_num=8):
+    pool = multiprocessing.Pool(process_num)
+    res_all = []
+    res_all = pool.starmap(func,args_list)
+    pool.close()
+    pool.join()
+    return res_all
+    
 
 
 if __name__=='__main__':

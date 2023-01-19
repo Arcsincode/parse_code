@@ -1,4 +1,5 @@
 import asyncio
+from socket import timeout
 import aiohttp
 import os
 import time
@@ -18,7 +19,7 @@ else:
 COUNT_LIST = [0]
 TOTAL_LIST = [1]
 TIMEOUT_TAO = 5 # 二进制指数退避的争用期窗口大小
-
+TIMEOUT = 5
 def timeit(func):
     def wrapper(*args, **kwargs):
         start = time.perf_counter()
@@ -55,7 +56,7 @@ async def get_json(session, url,):
     while True:
         timeout_times = random_time_out(timeout_times,)
         try:
-            response = await session.get(url,headers=HEADER,proxy=PROXIES,)
+            response = await session.get(url,headers=HEADER,proxy=PROXIES,timeout=TIMEOUT)
             if response.status == 200:
                 break
         except Exception as e:
@@ -78,7 +79,7 @@ async def post_json(session, url, data,):
     while True:
         timeout_times = random_time_out(timeout_times,)
         try:
-            response = await session.post(url, data=data, headers=HEADER,proxy=PROXIES,)
+            response = await session.post(url, data=data, headers=HEADER,proxy=PROXIES,timeout=TIMEOUT)
             if response.status == 200:
                 break
         except Exception as e:
@@ -96,7 +97,8 @@ async def download(session, name_url, to_dir):
 
     """
     try:
-        os.mkdir(to_dir)
+        # os.mkdir(to_dir)
+        os.makedirs(to_dir)
         print(f"已创建文件夹{to_dir}")
     except:
         pass
