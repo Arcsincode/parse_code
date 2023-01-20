@@ -1,5 +1,4 @@
 import time
-import pandas
 from kits import reFormat  
 from kits.reFormat import myTime
 import kits.normRequests as requests
