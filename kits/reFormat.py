@@ -1,6 +1,5 @@
 import time
 import re
-import pandas as pd
 
 
 def extra_range(string):
@@ -74,6 +73,7 @@ class myTime:
 
 
 def to_dataframe(res_dicts):
+    import pandas as pd
     """传入值为字典的列表"""
     # res_dicts = [reformat_dict(announcement) for announcement in dicts]
     ress_dicts = [list(res_dict.values()) for res_dict in res_dicts]    
