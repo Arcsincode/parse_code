@@ -1,4 +1,6 @@
-aiohttp==3.8.3
-pandas==1.4.1
+aiohttp
+pandas
 pdfplumber==0.7.6
-requests==2.22.0
+requests
+pymysql
+func_timeout
