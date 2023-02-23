@@ -51,7 +51,7 @@ async def get_json(session, url,):
     """
     :return: response.json()
     """ 
-    print(f"将要POST：【 {url} 】")
+    print(f"将要GET：【 {url} 】")
     timeout_times = 0
     while True:
         timeout_times = random_time_out(timeout_times,)
@@ -65,7 +65,7 @@ async def get_json(session, url,):
         
     res = await response.json()
     COUNT_LIST[0] += 1
-    print(f"{get_progress(COUNT_LIST[0],TOTAL_LIST[0])} √ POST")
+    print(f"{get_progress(COUNT_LIST[0],TOTAL_LIST[0])} √ GET")
     return res
 
 
